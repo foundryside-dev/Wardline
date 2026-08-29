@@ -1,0 +1,10 @@
+1. *Modify `src/wardline/scanner/taint/variable_level.py` to prevent unnecessary memory allocations.*
+   - Import `Iterable` from `collections.abc` outside of `TYPE_CHECKING` block.
+   - Update `_assignment_callee` and `_collect_return_paths` signatures to accept `nodes: Iterable[ast.AST]` instead of `nodes: list[ast.AST]`.
+   - Update the call sites of `_assignment_callee` and `_collect_return_paths` to pass generators/iterables directly (e.g. `ast.iter_child_nodes(node)` instead of `list(ast.iter_child_nodes(node))`, and `func_node.body` instead of `list(func_node.body)`).
+2. *Document learning in `.jules/bolt.md`.*
+   - Document that when implementing or modifying AST traversal functions, accept `Iterable[ast.AST]` and pass generators directly instead of eagerly materializing them into lists to prevent unnecessary memory allocations.
+3. *Run all relevant tests and linters.*
+   - Run `make format`, `make typecheck`, and `make test`.
+4. *Complete pre-commit steps*
+   - Complete pre-commit steps to ensure proper testing, verification, review, and reflection are done.
