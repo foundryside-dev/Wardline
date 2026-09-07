@@ -1,0 +1,3 @@
+## 2023-10-27 - Remove greedy generator realization in variable_level.py
+**Learning:** By unnecessarily wrapping `ast.iter_child_nodes(node)` in `list()` inside `_assignment_callee` and `_collect_return_paths`, we're triggering an eager realization of generators into memory during AST traversal. In large syntax trees, especially when deeply recursing in `variable_level.py`, this creates a ton of short-lived list allocations and puts unnecessary pressure on the garbage collector.
+**Action:** Always accept `Iterable[ast.AST]` (or `Iterator[ast.AST]`) instead of `list[ast.AST]` when creating AST traversal recursion helpers. This allows us to pass generators straight through avoiding full materialization.
