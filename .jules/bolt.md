@@ -1,0 +1,3 @@
+## 2025-02-28 - Avoid eager list materialization in AST traversal
+**Learning:** In highly repetitive operations like AST traversals (e.g., L2 taint propagation), materializing generator returns (like `ast.iter_child_nodes()`) into lists (e.g., `list(ast.iter_child_nodes(node))`) causes unnecessary memory allocations and overhead that scales poorly on large files.
+**Action:** Always accept `Iterable[ast.AST]` (or equivalent iterators) instead of `list` in recursive AST traversal functions and pass the generator directly to prevent intermediate allocations.
