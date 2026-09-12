@@ -1,0 +1,3 @@
+## 2024-10-11 - AST Traversal Memory Optimization
+**Learning:** The AST traversal functions like `_assignment_callee` and `_collect_return_paths` natively iterate over nodes but eagerly materialize generators like `ast.iter_child_nodes()` into lists via `list()`. This causes unnecessary list memory allocations per node visit.
+**Action:** When implementing or modifying AST traversal functions, always type parameters to accept `Iterable[ast.AST]` instead of `list[ast.AST]` and pass iterators (like generator expressions or `ast.iter_child_nodes()`) directly without calling `list()`.
